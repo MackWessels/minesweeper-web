@@ -93,10 +93,10 @@ function Board(props) {
 
   return (
     <div className="board-container">
-      {gameOver && <h2>Game Over!</h2>}
       <div className="board-grid"style={{gridTemplateColumns: `repeat(${cols}, 30px)`,}}>
         {renderTiles()}
       </div>
+      {gameOver && <h2>Game Over!</h2>}
     </div>
   );
 }
