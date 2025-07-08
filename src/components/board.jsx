@@ -63,18 +63,51 @@ function Board(props) {
 
   const [board, setBoard] = useState([]);
   const [gameOver, setGameOver] = useState(false);
+  const [time, setTime] = useState(0);
+  const [timerActive, setTimerActive] = useState(true);
 
-  function resetGame() {
-    const newBoard = createBoard(rows, cols, mines);
-    setBoard(newBoard);
-    setGameOver(false);
-  }
-
-
+  // Create the initial board once
   useEffect(function () {
-    const newBoard = createBoard(rows, cols, mines);
+    var newBoard = createBoard(rows, cols, mines);
     setBoard(newBoard);
   }, []);
+
+  // Timer logic using recursive setTimeout (avoiding callbacks)
+  useEffect(function () {
+    var timerId = null;
+
+    function tick() {
+      setTime(time + 1);
+
+      // Keep ticking if game is still active
+      if (timerActive && !gameOver) {
+        timerId = setTimeout(tick, 1000);
+      }
+    }
+
+    if (timerActive && !gameOver) {
+      timerId = setTimeout(tick, 1000);
+    }
+
+    // Cleanup function stops the timer
+    return function () {
+      clearTimeout(timerId);
+    };
+  }, [time, timerActive, gameOver]);
+
+  function resetGame() {
+  const newBoard = createBoard(rows, cols, mines);
+  setBoard(newBoard);
+  setGameOver(false);
+  setTime(0);
+  setTimerActive(true);
+}
+
+
+
+
+
+
 
   function renderTiles() {
     let tiles = [];
@@ -100,6 +133,7 @@ function Board(props) {
 
   return (
     <div className="board-container">
+      <h3>Time: {time}</h3>
       <div className="board-grid"style={{gridTemplateColumns: `repeat(${cols}, 30px)`,}}>
         {renderTiles()}
       </div>
