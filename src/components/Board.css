@@ -1,0 +1,17 @@
+.board-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.board-grid {
+  display: grid;
+  justify-content: center;
+  gap: 0;
+}
+
+h2 {
+  margin-bottom: 10px;
+  color: red;
+}

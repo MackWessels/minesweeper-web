@@ -1,6 +1,8 @@
 import React from 'react';
 import './Tile.css';
 
+const bombImgSrc = process.env.PUBLIC_URL + '/assets/bomb-clipart.png';
+
 function Tile({ tile, row, col, board, setBoard, setGameOver }) {
 
   function revealTile() {
@@ -92,7 +94,7 @@ function Tile({ tile, row, col, board, setBoard, setGameOver }) {
   let display = '';
   if (tile.isRevealed) {
     if (tile.isMine) {
-      display = 'B';
+       display = <img src={bombImgSrc} alt="bomb" style={{ width: '20px', height: '20px' }} />;
     } else if (tile.neighborMines > 0) {
       display = tile.neighborMines;
     }

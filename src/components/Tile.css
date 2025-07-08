@@ -1,0 +1,24 @@
+.tile {
+  width: 30px;
+  height: 30px;
+  border: 2px solid #888;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.tile.revealed {
+  background-color: #e0e0e0;
+}
+
+.tile.hidden {
+  background-color: #c0c0c0;
+}
+
+.tile.flagged {
+  background-color: #f0d000; 
+}
