@@ -3,11 +3,11 @@ import './Tile.css';
 
 const bombImgSrc = process.env.PUBLIC_URL + '/assets/bomb-clipart.png';
 
-function Tile({ tile, row, col, board, setBoard, setGameOver, checkWin, setHasWon }) {
+function Tile({ tile, row, col, board, setBoard, setGameOver, checkWin, setHasWon, gameOver }) {
 
   function revealTile() {
-    // Stop if already revealed or flagged
-    if (tile.isRevealed || tile.isFlagged) {
+    // Stop if already revealed, flagged, or game over
+    if (tile.isRevealed || tile.isFlagged || gameOver) {
       return;
     }
 
@@ -39,10 +39,8 @@ function Tile({ tile, row, col, board, setBoard, setGameOver, checkWin, setHasWo
       }
     }
 
-
     setBoard(newBoard);
   }
-
 
   function revealAll(board) {
     for (let r = 0; r < board.length; r++) {
@@ -60,11 +58,11 @@ function Tile({ tile, row, col, board, setBoard, setGameOver, checkWin, setHasWo
     ];
 
     for (var i = 0; i < directions.length; i++) {
-      var dr = directions[i][0];  // dr = directionsRow
-      var dc = directions[i][1];  // dc = directionsCol
+      var dr = directions[i][0];
+      var dc = directions[i][1];
 
-      var nr = r + dr;            // nr = neighborRow
-      var nc = c + dc;            // nc = neighborCol
+      var nr = r + dr;
+      var nc = c + dc;
 
       // If the neighbor tile is inside the board, hidden, and not a mine
       if (nr >= 0 && nr < board.length && nc >= 0 && nc < board[0].length &&
@@ -84,11 +82,17 @@ function Tile({ tile, row, col, board, setBoard, setGameOver, checkWin, setHasWo
     // Stops default browser behavior
     e.preventDefault();
 
-    if (tile.isRevealed) {
+    if (tile.isRevealed || gameOver) {
       return;
     }
 
-    var newBoard = board.slice();
+    // Deep copy the board
+    var newBoard = board.map(function (row) {
+      return row.map(function (tile) {
+        return { ...tile };
+      });
+    });
+
     newBoard[row][col].isFlagged = !newBoard[row][col].isFlagged;
     setBoard(newBoard);
   }
@@ -118,7 +122,6 @@ function Tile({ tile, row, col, board, setBoard, setGameOver, checkWin, setHasWo
     display = '!';
   }
 
-  // Builds a string for CSS classes 
   var tileClass = 'tile';
   if (tile.isRevealed) {
     tileClass += ' revealed';

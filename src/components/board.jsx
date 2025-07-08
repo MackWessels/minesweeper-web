@@ -157,20 +157,23 @@ function Board(props) {
 
   return (
     <div className="board-container">
-      <h3>Time: {time}</h3>
-      <div className="board-grid"style={{gridTemplateColumns: `repeat(${cols}, 30px)`,}}>
+      <h1>Minesweeper</h1>
+      <h3>Time: {time} s</h3>
+      <div className="board-grid" style={{ gridTemplateColumns: `repeat(${cols}, 30px)` }}>
         {renderTiles()}
       </div>
-      {gameOver && (
-        <h2 style={{ color: messageColor }}>
-          {gameMessage}
-        </h2>
-      )}
-      {gameOver && (
-        <button onClick={resetGame} style={{ marginTop: '10px' }}>
-          Restart
-        </button>
-      )}
+      <div className="message-area">
+        {gameOver && (
+          <h2 style={{ color: messageColor }}>
+            {gameMessage}
+          </h2>
+        )}
+        {gameOver && (
+          <button onClick={resetGame} style={{ marginTop: '10px' }}>
+            Restart
+          </button>
+        )}
+      </div>
     </div>
   );
 }
