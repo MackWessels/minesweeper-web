@@ -64,6 +64,13 @@ function Board(props) {
   const [board, setBoard] = useState([]);
   const [gameOver, setGameOver] = useState(false);
 
+  function resetGame() {
+    const newBoard = createBoard(rows, cols, mines);
+    setBoard(newBoard);
+    setGameOver(false);
+  }
+
+
   useEffect(function () {
     const newBoard = createBoard(rows, cols, mines);
     setBoard(newBoard);
@@ -97,6 +104,11 @@ function Board(props) {
         {renderTiles()}
       </div>
       {gameOver && <h2>Game Over!</h2>}
+      {gameOver && (
+        <button onClick={resetGame} style={{ marginTop: '10px' }}>
+          Restart
+        </button>
+      )}
     </div>
   );
 }
