@@ -65,6 +65,8 @@ function Board(props) {
   const [gameOver, setGameOver] = useState(false);
   const [time, setTime] = useState(0);
   const [timerActive, setTimerActive] = useState(true);
+  const [hasWon, setHasWon] = useState(false);
+
 
   // Create the initial board once
   useEffect(function () {
@@ -96,17 +98,24 @@ function Board(props) {
   }, [time, timerActive, gameOver]);
 
   function resetGame() {
-  const newBoard = createBoard(rows, cols, mines);
-  setBoard(newBoard);
-  setGameOver(false);
-  setTime(0);
-  setTimerActive(true);
-}
+    const newBoard = createBoard(rows, cols, mines);
+    setBoard(newBoard);
+    setGameOver(false);
+    setTime(0);
+    setTimerActive(true);
+  }
 
 
-
-
-
+  function checkWin(board) {
+    for (var r = 0; r < board.length; r++) {
+      for (var c = 0; c < board[0].length; c++) {
+        if (!board[r][c].isMine && !board[r][c].isRevealed) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
 
 
   function renderTiles() {
@@ -124,11 +133,26 @@ function Board(props) {
             board={board}               // Pointer to the board (so tile can look at neighbors)
             setBoard={setBoard}         // Lets tile update board state and trigger re-render
             setGameOver={setGameOver}   // Lets tile declare game over
+            checkWin={checkWin}
+            setHasWon={setHasWon}
           />
         );
       }
     }
     return tiles;
+  }
+
+  let gameMessage = null;
+  let messageColor = 'red';
+
+  if (gameOver) {
+    if (hasWon) {
+      gameMessage = "Success!";
+      messageColor = 'green';
+    } else {
+      gameMessage = "Game Over!";
+      messageColor = 'red';
+    }
   }
 
   return (
@@ -137,7 +161,11 @@ function Board(props) {
       <div className="board-grid"style={{gridTemplateColumns: `repeat(${cols}, 30px)`,}}>
         {renderTiles()}
       </div>
-      {gameOver && <h2>Game Over!</h2>}
+      {gameOver && (
+        <h2 style={{ color: messageColor }}>
+          {gameMessage}
+        </h2>
+      )}
       {gameOver && (
         <button onClick={resetGame} style={{ marginTop: '10px' }}>
           Restart

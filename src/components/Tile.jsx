@@ -3,7 +3,7 @@ import './Tile.css';
 
 const bombImgSrc = process.env.PUBLIC_URL + '/assets/bomb-clipart.png';
 
-function Tile({ tile, row, col, board, setBoard, setGameOver }) {
+function Tile({ tile, row, col, board, setBoard, setGameOver, checkWin, setHasWon }) {
 
   function revealTile() {
     // Stop if already revealed or flagged
@@ -11,22 +11,38 @@ function Tile({ tile, row, col, board, setBoard, setGameOver }) {
       return;
     }
 
-    // Copy the board array to trigger rerender
-    var newBoard = board.slice();
+    // Deep copy the board array to trigger rerender safely
+    var newBoard = board.map(function (row) {
+      return row.map(function (tile) {
+        return { ...tile };
+      });
+    });
+
     newBoard[row][col].isRevealed = true;
 
     // Game over if you trigger a mine
     if (tile.isMine) {
-      setGameOver(true);          
-      revealAll(newBoard);     
+      setGameOver(true);
+      revealAll(newBoard);
     } 
     // If no neighboring mines, reveal connected empty tiles
     else if (tile.neighborMines === 0) {
       revealEmptyTiles(newBoard, row, col);
     }
 
+    // Check win condition if not a mine
+    if (!tile.isMine) {
+      var won = checkWin(newBoard);
+      if (won) {
+        setHasWon(true);   
+        setGameOver(true);
+      }
+    }
+
+
     setBoard(newBoard);
   }
+
 
   function revealAll(board) {
     for (let r = 0; r < board.length; r++) {
