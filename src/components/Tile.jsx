@@ -2,6 +2,9 @@ import React from 'react';
 import './Tile.css';
 
 const bombImgSrc = process.env.PUBLIC_URL + '/assets/bomb-clipart.png';
+const clickSound = new Audio(process.env.PUBLIC_URL + '/sounds/click.wav');
+const explosionSound = new Audio(process.env.PUBLIC_URL + '/sounds/explosion.wav');
+
 
 function Tile({ tile, row, col, board, setBoard, setGameOver, checkWin, setHasWon, gameOver }) {
 
@@ -9,7 +12,7 @@ function Tile({ tile, row, col, board, setBoard, setGameOver, checkWin, setHasWo
     // Stop if already revealed, flagged, or game over
     if (tile.isRevealed || tile.isFlagged || gameOver) {
       return;
-    }
+    }    
 
     // Deep copy the board array to trigger rerender safely
     var newBoard = board.map(function (row) {
@@ -23,12 +26,16 @@ function Tile({ tile, row, col, board, setBoard, setGameOver, checkWin, setHasWo
     // Game over if you trigger a mine
     if (tile.isMine) {
       setGameOver(true);
+      explosionSound.play();
       revealAll(newBoard);
-    } 
-    // If no neighboring mines, reveal connected empty tiles
-    else if (tile.neighborMines === 0) {
-      revealEmptyTiles(newBoard, row, col);
+    } else{
+      playSound(clickSound);
+      if (tile.neighborMines === 0) {
+        revealEmptyTiles(newBoard, row, col);
+      }
     }
+    // If no neighboring mines, reveal connected empty tiles
+
 
     // Check win condition if not a mine
     if (!tile.isMine) {
@@ -38,6 +45,8 @@ function Tile({ tile, row, col, board, setBoard, setGameOver, checkWin, setHasWo
         setGameOver(true);
       }
     }
+
+    
 
     setBoard(newBoard);
   }
@@ -110,6 +119,12 @@ function Tile({ tile, row, col, board, setBoard, setGameOver, checkWin, setHasWo
       default: return 'black';
     }
   }
+
+  function playSound(sound) {
+    const clone = sound.cloneNode();
+    clone.play();
+  }
+
 
   let display = '';
   if (tile.isRevealed) {
