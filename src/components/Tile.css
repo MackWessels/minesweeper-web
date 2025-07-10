@@ -29,7 +29,7 @@
 }
 
 .tile.flagged {
-  background-color: #f0d000;
+  background: linear-gradient(145deg, #f0d000, #ffea00);
 }
 
 .tile img {
