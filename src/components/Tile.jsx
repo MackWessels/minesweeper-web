@@ -134,7 +134,7 @@ function Tile({ tile, row, col, board, setBoard, setGameOver, checkWin, setHasWo
       display = tile.neighborMines;
     }
   } else if (tile.isFlagged) {
-    display = '!';
+    display = '🚩';
   }
 
   var tileClass = 'tile';
