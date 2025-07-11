@@ -2,14 +2,16 @@
 
 A fully functional, classic Minesweeper game built entirely in **React**.
 
+![Minesweeper Screenshot](./public/assets/screenshot.PNG)
+
 ## Features
 
 - Classic Minesweeper gameplay
 - Recursive empty tile reveals
-- Flagging functionality (right-click to place/remove flags)
+- Flagging functionality with custom flag icons (right-click to place/remove flags)
 - Timer with game over detection
-- Success condition when all safe tiles are revealed
-- Clean UI with hover effects and subtle animations
+- Win condition when all safe tiles are revealed
+- Clean, modern UI with hover effects and subtle animations
 
 ## Tech Stack
 
@@ -24,7 +26,7 @@ I built this project to:
 - Practice clean state management and recursive logic
 - Create a fun, nostalgic game that looks modern and works smoothly
 
-##  How to Play
+## How to Play
 
 1. Click tiles to reveal them.
 2. Avoid mines (bomb tiles).
